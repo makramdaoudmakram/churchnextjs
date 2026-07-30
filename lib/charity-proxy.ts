@@ -1,23 +1,11 @@
 import { auth } from "@/auth";
 import { getServerCharityApiUrlCandidates } from "@/lib/charity-api-server";
-import { getToken } from "next-auth/jwt";
 import { permissionHintForCharityPath } from "@/lib/charity-permissions";
 import { NextResponse } from "next/server";
 
 async function resolveAccessToken(): Promise<string | undefined> {
   const session = await auth();
-  if (session?.accessToken) {
-    return session.accessToken;
-  }
-
-  try {
-    const jwt = await getToken({
-      secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
-    });
-    return typeof jwt?.jwt === "string" ? jwt.jwt : undefined;
-  } catch {
-    return undefined;
-  }
+  return session?.accessToken;
 }
 
 export async function proxyCharityApi(pathWithQuery: string, init?: RequestInit) {

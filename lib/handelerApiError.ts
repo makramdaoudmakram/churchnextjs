@@ -1,15 +1,21 @@
-export function handelerApiError(error, defualteMessage = "sume thing went wrong") {
+export function handelerApiError(error: unknown, defualteMessage = "sume thing went wrong") {
   if (!error) return defualteMessage;
 
-  if (error?.response?.error?.message) {
-    return error.response.error.message;
+  const err = error as {
+    response?: { error?: { message?: string } };
+    error?: { message?: string };
+    message?: string;
+  };
+
+  if (err.response?.error?.message) {
+    return err.response.error.message;
   }
 
-  if (error?.error?.message) {
-    return error.error.message;
+  if (err.error?.message) {
+    return err.error.message;
   }
-  if (error?.message) {
-    return error.message;
+  if (err.message) {
+    return err.message;
   }
 
   return defualteMessage;
