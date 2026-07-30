@@ -62,7 +62,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       toast.error(
         res?.error === "CredentialsSignin"
           ? "Invalid username or password."
-          : "Login failed. Check credentials and ensure the Charity API is running on port 5173."
+          : "Login failed. Check credentials and ensure the Charity API is reachable."
       );
     }
 

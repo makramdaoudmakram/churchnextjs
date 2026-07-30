@@ -33,6 +33,7 @@ declare module "@auth/core/jwt" {
   interface JWT {
     id?: string;
     jwt?: string;
+    accessToken?: string;
     roles?: string[];
     permissions?: string[];
   }
@@ -88,6 +89,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.jwt = user.jwt;
+        token.accessToken = user.jwt;
         token.roles = user.roles;
         token.permissions = user.permissions;
       }
