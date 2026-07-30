@@ -11,7 +11,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -26,6 +26,19 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  const authError = searchParams.get("error");
+
+  useEffect(() => {
+    if (authError === "Configuration") {
+      toast.error(
+        "Auth is not configured on Vercel. Add AUTH_SECRET (32+ chars), AUTH_URL, and CHARITY_API_URL in Project Settings → Environment Variables, then redeploy."
+      );
+    } else if (authError === "CredentialsSignin") {
+      toast.error("Invalid username or password.");
+    } else if (authError) {
+      toast.error(`Sign-in error: ${authError}`);
+    }
+  }, [authError]);
 
   const [formData, setFormData] = useState<FormData>({
     userName: "",

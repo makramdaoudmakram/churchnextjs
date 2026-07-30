@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { DefaultSession } from "@auth/core/types";
 import { charityLoginServer } from "@/lib/charity-api-server";
+import { getAuthSecret } from "@/lib/auth-config";
 import { normalizeLoginPayload, permissionsFromAccessToken, rolesFromAccessToken } from "@/lib/jwt-permissions";
-
 declare module "@auth/core/types" {
   interface Session {
     user: {
@@ -126,8 +126,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   session: { strategy: "jwt" },
   trustHost: true,
-  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
+  secret: getAuthSecret(),
 });
